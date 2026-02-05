@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { User, Home, Briefcase, Building2, GraduationCap, Car, CreditCard, Coins, Landmark, LucideIcon } from 'lucide-react';
+import { AppIcon } from './AppIcon';
 
 interface LoanProduct {
     id: string;
@@ -9,31 +9,7 @@ interface LoanProduct {
     icon: string;
     order: number;
 }
-
-interface ComparisonParameter {
-    id: string;
-    title: string;
-    order: number;
-}
-
-interface ComparisonValue {
-    id: string;
-    productId: string;
-    parameterId: string;
-    value: string;
-}
-
-const iconMap: Record<string, LucideIcon> = {
-    'User': User,
-    'Home': Home,
-    'Briefcase': Briefcase,
-    'Building2': Building2,
-    'GraduationCap': GraduationCap,
-    'Car': Car,
-    'CreditCard': CreditCard,
-    'Coins': Coins,
-    'Landmark': Landmark,
-};
+// ... interface definitions unchanged
 
 export default function ComparisonSection() {
     const [products, setProducts] = useState<LoanProduct[]>([]);
@@ -41,6 +17,7 @@ export default function ComparisonSection() {
     const [values, setValues] = useState<ComparisonValue[]>([]);
 
     useEffect(() => {
+        // ... fetchData logic unchanged
         const fetchData = async () => {
             try {
                 // Fetch Products
@@ -97,14 +74,13 @@ export default function ComparisonSection() {
                                 </th>
                                 {/* Product Headers */}
                                 {products.map((product) => {
-                                    const IconComponent = iconMap[product.icon] || User;
                                     return (
                                         <th
                                             key={product.id}
                                             className="p-5 text-lg font-medium border-r border-gray-700/50 last:border-r-0 text-left align-middle"
                                         >
                                             <div className="flex items-center gap-3">
-                                                <IconComponent className="w-5 h-5 text-teal-400" />
+                                                <AppIcon name={product.icon} className="w-5 h-5 text-teal-400" />
                                                 <span>{product.name}</span>
                                             </div>
                                         </th>

@@ -2,10 +2,11 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, ChevronDown, User, Home, Briefcase, Building, Car, Bike, Percent, CreditCard, Truck, Info, Target, FileText, Phone, Headset, Shield, ClipboardList } from 'lucide-react';
+import { Menu, X, ChevronDown, User, Home, Briefcase, Building, Car, Bike, Percent, CreditCard, Truck, Info, Target, FileText, Phone, Headset, Shield, ClipboardList, Landmark, PiggyBank, GraduationCap, Coins, Wallet, Banknote, Building2, Stethoscope, Plane, Gem } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { LoanBanner } from '../types';
+import { AppIcon } from './AppIcon';
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -28,23 +29,13 @@ export default function Navbar() {
     const supportLinks = [
         { title: 'Help Center', href: '/help-center', icon: <Headset size={18} /> },
         { title: 'Terms of Service', href: '/terms', icon: <ClipboardList size={18} /> },
-        { title: 'Privacy Policy', href: '/privacy', icon: <Shield size={18} /> },
+        { title: 'Privacy Policy', href: '/privacy-policy', icon: <Shield size={18} /> },
     ];
 
     const getServiceIcon = (title: string, iconName?: string) => {
         // 1. Try to match by explicit icon name from DB
         if (iconName) {
-            switch (iconName) {
-                case 'user': return <User size={18} />;
-                case 'home': return <Home size={18} />;
-                case 'briefcase': return <Briefcase size={18} />;
-                case 'building': return <Building size={18} />;
-                case 'car': return <Car size={18} />;
-                case 'bike': return <Bike size={18} />;
-                case 'truck': return <Truck size={18} />;
-                case 'percent': return <Percent size={18} />;
-                case 'credit-card': return <CreditCard size={18} />;
-            }
+            return <AppIcon name={iconName} size={18} />;
         }
 
         // 2. Fallback to title matching

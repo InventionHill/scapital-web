@@ -35,11 +35,19 @@ async function getService(id: string): Promise<LoanBanner | null> {
     }
 }
 
+import { AppIcon } from '../../components/AppIcon';
+import { iconMap } from '../../lib/iconLibrary';
+
 // Helper to map icon names or titles to Lucide icons
 const getBenefitIcon = (iconName: string | undefined, title: string) => {
     const props = { size: 24, strokeWidth: 2 };
 
-    // Explicit mapping if provided from backend
+    // 1. Try to match from full library first
+    if (iconName && iconMap[iconName]) {
+        return <AppIcon name={iconName} {...props} />;
+    }
+
+    // 2. Explicit mapping for legacy or fallback icons
     if (iconName) {
         switch (iconName.toLowerCase()) {
             case 'zap': return <Zap {...props} />;
@@ -52,7 +60,7 @@ const getBenefitIcon = (iconName: string | undefined, title: string) => {
         }
     }
 
-    // Smart fallback based on title keywords
+    // 3. Smart fallback based on title keywords
     const t = title.toLowerCase();
     if (t.includes('quick') || t.includes('fast')) return <Zap {...props} />;
     if (t.includes('collateral') || t.includes('security')) return <XCircle {...props} />;
@@ -381,7 +389,7 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
                         </div>
 
                         {/* Table */}
-                        <div className="overflow-hidden rounded-lg border border-[#137a78] shadow-lg">
+                        <div className="overflow-hidden rounded-lg border border-[#137a78]">
                             <div className="overflow-x-auto">
                                 <table className="w-full min-w-[700px] border-collapse">
                                     <thead>

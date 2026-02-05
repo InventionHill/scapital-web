@@ -57,7 +57,7 @@ export default function CareerPage() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
                         {/* Left Content */}
-                        <RevealOnScroll className="space-y-4">
+                        <RevealOnScroll className="space-y-6">
                             <h1 className="text-2xl md:text-4xl lg:text-[40px] font-extrabold text-[#1f2937] leading-[1.1] tracking-tight">
                                 Build Your Career With Us and Unlock Real <br />
                                 <span className="text-[#0d9488]">Growth Opportunities</span>
