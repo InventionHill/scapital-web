@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
 import { CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useDialog } from '../context/DialogContext';
 
 // Define the API data interface
 interface CtaButton {
@@ -34,6 +36,7 @@ export default function LoanTabsSection() {
     const [activeTabId, setActiveTabId] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const { openDialog } = useDialog();
 
     useEffect(() => {
         const fetchBanners = async () => {
@@ -173,20 +176,20 @@ export default function LoanTabsSection() {
 
                         <div className="flex gap-4">
                             {activeData.ctaPrimary?.enabled && (
-                                <a
-                                    href={activeData.ctaPrimary.url}
+                                <button
+                                    onClick={() => openDialog({ loanType: activeData.title })}
                                     className="bg-teal-700 text-white px-8 py-3 rounded-full font-bold text-xs tracking-widest hover:bg-teal-800 transition-colors uppercase inline-block text-center min-w-[120px]"
                                 >
                                     {activeData.ctaPrimary.label}
-                                </a>
+                                </button>
                             )}
                             {activeData.ctaSecondary?.enabled && (
-                                <a
-                                    href={activeData.ctaSecondary.url}
+                                <Link
+                                    href={`/services/${activeData.id}`}
                                     className="border border-teal-600 text-teal-700 px-8 py-3 rounded-full font-bold text-xs tracking-widest hover:bg-teal-50 transition-colors uppercase inline-block text-center min-w-[120px]"
                                 >
                                     {activeData.ctaSecondary.label}
-                                </a>
+                                </Link>
                             )}
                         </div>
                     </div>

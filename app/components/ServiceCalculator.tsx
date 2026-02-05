@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Coins, Clock, TrendingUp, ArrowRight } from 'lucide-react';
+import { useDialog } from '../context/DialogContext';
 
 interface ServiceCalculatorProps {
     serviceTitle?: string;
@@ -28,6 +29,7 @@ export default function ServiceCalculator({
     minInterest = 5.0,
     maxInterest = 25.0
 }: ServiceCalculatorProps) {
+    const { openDialog } = useDialog();
     // Handle null values by falling back to defaults (React default props only handle undefined)
     const effectiveDefaultAmount = defaultAmount ?? 500000;
     const effectiveMinAmount = minAmount ?? 10000;
@@ -191,9 +193,7 @@ export default function ServiceCalculator({
                     </span>
                 </div>
 
-                <button className="w-full bg-[#137a78] hover:bg-teal-700 text-white font-bold text-sm tracking-widest uppercase py-4 rounded-lg transition-colors shadow-lg shadow-teal-700/20">
-                    Apply for {serviceTitle}
-                </button>
+
             </div>
 
         </div>

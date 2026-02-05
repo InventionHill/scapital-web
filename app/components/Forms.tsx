@@ -12,9 +12,9 @@ const Forms = () => {
     });
 
     const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        email: ''
+        fullName: '',
+        email: '',
+        phone: ''
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -58,17 +58,26 @@ const Forms = () => {
         setSubmitStatus('idle');
 
         try {
+            // Backend requires loanType, loanAmount, tenure. 
+            // We provide defaults for this "Quick Application" form.
+            const payload = {
+                ...formData,
+                loanType: 'General Inquiry',
+                loanAmount: '0',
+                tenure: '0'
+            };
+
             const response = await fetch(`${API_URL}/loan-applications`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(payload),
             });
 
             if (response.ok) {
                 setSubmitStatus('success');
-                setFormData({ firstName: '', lastName: '', email: '' });
+                setFormData({ fullName: '', email: '', phone: '' });
                 // Reset success message after 3 seconds
                 setTimeout(() => setSubmitStatus('idle'), 5000);
             } else {
@@ -151,26 +160,13 @@ const Forms = () => {
                     ) : (
                         <form className="space-y-4" onSubmit={handleSubmit}>
                             <div>
-                                <label htmlFor="firstName" className="sr-only">First Name</label>
+                                <label htmlFor="fullName" className="sr-only">Full Name</label>
                                 <input
                                     type="text"
-                                    id="firstName"
-                                    value={formData.firstName}
+                                    id="fullName"
+                                    value={formData.fullName}
                                     onChange={handleChange}
-                                    placeholder="First Name"
-                                    required
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-teal-600 focus:ring-1 focus:ring-teal-600 outline-none transition-all placeholder:text-gray-500 font-medium bg-gray-50/50"
-                                />
-                            </div>
-
-                            <div>
-                                <label htmlFor="lastName" className="sr-only">Last Name</label>
-                                <input
-                                    type="text"
-                                    id="lastName"
-                                    value={formData.lastName}
-                                    onChange={handleChange}
-                                    placeholder="Last Name"
+                                    placeholder="Full Name"
                                     required
                                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-teal-600 focus:ring-1 focus:ring-teal-600 outline-none transition-all placeholder:text-gray-500 font-medium bg-gray-50/50"
                                 />
@@ -184,6 +180,19 @@ const Forms = () => {
                                     value={formData.email}
                                     onChange={handleChange}
                                     placeholder="Email Address"
+                                    required
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-teal-600 focus:ring-1 focus:ring-teal-600 outline-none transition-all placeholder:text-gray-500 font-medium bg-gray-50/50"
+                                />
+                            </div>
+
+                            <div>
+                                <label htmlFor="phone" className="sr-only">Mobile Number</label>
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    placeholder="Mobile Number"
                                     required
                                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-teal-600 focus:ring-1 focus:ring-teal-600 outline-none transition-all placeholder:text-gray-500 font-medium bg-gray-50/50"
                                 />

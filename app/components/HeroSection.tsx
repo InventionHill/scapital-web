@@ -1,6 +1,10 @@
+"use client";
+
 import Image from 'next/image';
+import { useDialog } from '../context/DialogContext';
 
 export default function HeroSection() {
+    const { openDialog } = useDialog();
     return (
         <div className="relative min-h-[500px] md:min-h-[600px] flex flex-col justify-between overflow-hidden">
 
@@ -43,7 +47,10 @@ export default function HeroSection() {
                         <p className="text-[#000000] text-lg mb-6 max-w-lg font-medium leading-relaxed">
                             Personal, Home, Business & Vehicle loans with minimal documentation and quick disbursal
                         </p>
-                        <button className="bg-[#007A6E] text-white px-10 py-3 rounded-full font-bold text-sm tracking-widest uppercase hover:bg-teal-800 transition-all ">
+                        <button
+                            onClick={openDialog}
+                            className="bg-[#007A6E] text-white px-10 py-3 rounded-full font-bold text-sm tracking-widest uppercase hover:bg-teal-800 transition-all "
+                        >
                             Apply Now
                         </button>
                     </div>

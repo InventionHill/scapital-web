@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Coins, Clock, TrendingUp, Receipt, ArrowRight } from 'lucide-react';
+import { useDialog } from '../context/DialogContext';
 
 interface LoanType {
     id: string;
@@ -23,6 +24,7 @@ interface Props {
 }
 
 export default function SmartCalculatorsSection({ defaultTabId, compact = false }: Props) {
+    const { openDialog } = useDialog();
     const [loanTypes, setLoanTypes] = useState<LoanType[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<LoanType | null>(null);
@@ -272,7 +274,14 @@ export default function SmartCalculatorsSection({ defaultTabId, compact = false 
 
                         {/* Apply Button */}
                         <div className="flex flex-col items-center gap-4">
-                            <button className="w-full bg-teal-700 text-white py-6 rounded-full font-bold text-sm tracking-widest uppercase hover:bg-teal-800 transition-all shadow-xl shadow-teal-900/10 flex items-center justify-center gap-3">
+                            <button
+                                onClick={() => openDialog({
+                                    loanType: activeTab.name,
+                                    loanAmount: amount.toString(),
+                                    tenure: years.toString()
+                                })}
+                                className="w-full bg-teal-700 text-white py-6 rounded-full font-bold text-sm tracking-widest uppercase hover:bg-teal-800 transition-all shadow-xl shadow-teal-900/10 flex items-center justify-center gap-3"
+                            >
                                 APPLY FOR {activeTab.name}
                                 <ArrowRight size={20} />
                             </button>

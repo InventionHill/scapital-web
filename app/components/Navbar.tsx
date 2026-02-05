@@ -7,8 +7,10 @@ import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { LoanBanner } from '../types';
 import { AppIcon } from './AppIcon';
+import { useDialog } from '../context/DialogContext';
 
 export default function Navbar() {
+    const { openDialog } = useDialog();
     const [isOpen, setIsOpen] = useState(false);
     const [isServicesOpen, setIsServicesOpen] = useState(false);
     const [isCompanyOpen, setIsCompanyOpen] = useState(false);
@@ -259,7 +261,10 @@ export default function Navbar() {
                         <button className="text-gray-800 font-bold text-xs tracking-wider border-[1px] border-black px-6 py-2.5 rounded-full hover:border-teal-600 hover:text-teal-600 transition-colors uppercase">
                             Login
                         </button>
-                        <button className="bg-[#111827] text-white px-6 py-2.5 border-[1px] border-black rounded-full font-bold text-xs tracking-wider hover:bg-gray-800 transition-colors uppercase">
+                        <button
+                            onClick={openDialog}
+                            className="bg-[#111827] text-white px-6 py-2.5 border-[1px] border-black rounded-full font-bold text-xs tracking-wider hover:bg-gray-800 transition-colors uppercase"
+                        >
                             Apply Now
                         </button>
                     </div>

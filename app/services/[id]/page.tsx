@@ -20,6 +20,7 @@ import ServiceCalculator from '../../components/ServiceCalculator';
 import RevealOnScroll from '@/app/components/RevealOnScroll';
 import TestimonialsSection from '@/app/components/TestimonialsSection';
 import FAQSection from '@/app/components/FAQSection';
+import ServicePageCTA from '../../components/ServicePageCTA';
 
 async function getService(id: string): Promise<LoanBanner | null> {
     try {
@@ -135,12 +136,10 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
                             <div className="pt-8">
                                 <div className="flex flex-wrap gap-4">
                                     {service.ctaPrimary?.enabled && (
-                                        <a
-                                            href={service.ctaPrimary.url || '#'}
-                                            className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-3.5 rounded-full font-bold text-sm tracking-widest uppercase transition-all shadow-lg flex items-center gap-2"
-                                        >
-                                            {service.ctaPrimary.label}
-                                        </a>
+                                        <ServicePageCTA
+                                            label={service.ctaPrimary.label}
+                                            loanType={service.title} // Pass the service title as loan type
+                                        />
                                     )}
                                 </div>
                             </div>
@@ -362,12 +361,11 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
                         {/* Button CTA */}
                         {service.ctaPrimary?.enabled && (
                             <div className="mt-8 text-center">
-                                <a
-                                    href={service.ctaPrimary.url || '#'}
+                                <ServicePageCTA
+                                    label={service.stepsButtonLabel || `Apply for ${service.title}`}
+                                    loanType={service.title}
                                     className="inline-block bg-[#137a78] hover:bg-[#0f605e] text-white px-16 py-3 rounded-lg font-bold text-[16px] shadow-lg hover:shadow-xl transition-all"
-                                >
-                                    {service.stepsButtonLabel || `Apply for ${service.title}`}
-                                </a>
+                                />
                             </div>
                         )}
                     </div>

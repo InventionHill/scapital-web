@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import { DialogProvider } from "./context/DialogContext";
+import ApplicationDialog from "./components/ApplicationDialog";
 
 const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700'],
@@ -61,7 +63,10 @@ export default function RootLayout({
         className={`${poppins.variable} font-sans antialiased`}
         suppressHydrationWarning={true}
       >
-        {children}
+        <DialogProvider>
+          {children}
+          <ApplicationDialog />
+        </DialogProvider>
       </body>
     </html>
   );

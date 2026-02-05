@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { AppIcon } from './AppIcon';
+import { useDialog } from '../context/DialogContext';
 
 interface LoanProduct {
     id: string;
@@ -9,9 +10,21 @@ interface LoanProduct {
     icon: string;
     order: number;
 }
-// ... interface definitions unchanged
+
+interface ComparisonParameter {
+    id: string;
+    title: string;
+    order: number;
+}
+
+interface ComparisonValue {
+    productId: string;
+    parameterId: string;
+    value: string;
+}
 
 export default function ComparisonSection() {
+    const { openDialog } = useDialog();
     const [products, setProducts] = useState<LoanProduct[]>([]);
     const [parameters, setParameters] = useState<ComparisonParameter[]>([]);
     const [values, setValues] = useState<ComparisonValue[]>([]);
@@ -108,7 +121,10 @@ export default function ComparisonSection() {
                                 <td className="p-6 border-r border-gray-100 last:border-r-0 text-center"></td>
                                 {products.map((product) => (
                                     <td key={`btn-${product.id}`} className="p-6 border-r border-gray-100 last:border-r-0 text-center">
-                                        <button className="bg-teal-700 text-white px-8 py-3 rounded-full text-[10px] font-bold tracking-widest uppercase hover:bg-teal-800 transition-colors">
+                                        <button
+                                            onClick={() => openDialog({ loanType: product.name })}
+                                            className="bg-teal-700 text-white px-8 py-3 rounded-full text-[10px] font-bold tracking-widest uppercase hover:bg-teal-800 transition-colors"
+                                        >
                                             Apply Now
                                         </button>
                                     </td>
