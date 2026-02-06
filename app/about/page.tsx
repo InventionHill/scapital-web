@@ -39,7 +39,7 @@ export default function CareerPage() {
             <Navbar />
 
             {/* Breadcrumb */}
-            <div className="bg-white pt-8">
+            <div className="bg-white pt-8 pb-8">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center text-xs font-bold tracking-widest uppercase text-gray-500 gap-2">
                         <Link href="/" className="hover:text-teal-600 flex items-center gap-1">
@@ -69,11 +69,11 @@ export default function CareerPage() {
                                 SCAPITAL is your trusted financial loan partner, delivering fast and transparent loan solutions for every need. With quick approvals, minimal documentation, and expert guidance, we make the borrowing process smooth and dependable. Our focus is on simple, customer-first financing you can rely on.
                             </p>
 
-                            <div className="pt-2">
+                            {/* <div className="pt-2">
                                 <button className="bg-[#137a78] hover:bg-teal-700 text-white px-8 py-3 rounded-full font-bold text-sm tracking-widest uppercase transition-all shadow-lg hover:shadow-xl hover:-translate-y-1">
                                     View Open Position
                                 </button>
-                            </div>
+                            </div> */}
                         </RevealOnScroll>
 
                         {/* Right Content - Image */}

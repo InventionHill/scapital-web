@@ -74,7 +74,7 @@ export default function TermsOfService() {
                 <div className="absolute top-0 right-0 w-1/3 h-full bg-teal-500/10 blur-[100px] rounded-full transform translate-x-1/2 -translate-y-1/2" />
                 <div className="absolute bottom-0 left-0 w-1/4 h-full bg-blue-500/10 blur-[80px] rounded-full transform -translate-x-1/3 translate-y-1/3" />
 
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
                     <span className="inline-block py-1 px-3 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold tracking-wider uppercase mb-4 border border-teal-500/30">
                         Legal
                     </span>
@@ -92,7 +92,7 @@ export default function TermsOfService() {
 
             {/* Content Section */}
             <main className="flex-grow -mt-12 px-4 sm:px-6 lg:px-8 pb-20 relative z-20">
-                <div className="max-w-4xl mx-auto">
+                <div className="max-w-7xl mx-auto">
                     <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 overflow-hidden border border-gray-100">
                         <div className="p-8 md:p-12 lg:p-16">
                             <div className="prose prose-lg max-w-none text-gray-700

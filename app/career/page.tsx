@@ -37,7 +37,7 @@ export default function CareerPage() {
             <Navbar />
 
             {/* Breadcrumb */}
-            <div className="bg-white pt-8">
+            <div className="bg-white pt-8 pb-8">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center text-xs font-bold tracking-widest uppercase text-gray-500 gap-2">
                         <Link href="/" className="hover:text-teal-600 flex items-center gap-1">

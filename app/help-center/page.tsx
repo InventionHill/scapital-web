@@ -2,20 +2,31 @@
 
 import { BadgeCheck, ChevronRight, Clock, CreditCard, FileText, Headphones, Mail, MapPin, Percent, Phone, Scan, Search, ShieldCheck, User } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import FAQSection from '../components/FAQSection';
 import Footer from '../components/Footer';
 import Forms from '../components/Forms';
 import Navbar from '../components/Navbar';
 import RevealOnScroll from '../components/RevealOnScroll';
+import { getContactInfo, ContactInfo } from '../lib/api';
 
 export default function HelpCenterPage() {
+    const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null);
+
+    useEffect(() => {
+        async function fetchContact() {
+            const data = await getContactInfo();
+            setContactInfo(data);
+        }
+        fetchContact();
+    }, []);
 
     return (
         <main className="min-h-screen bg-white font-sans">
             <Navbar />
 
             {/* Breadcrumb */}
-            <div className="bg-white pt-8">
+            <div className="bg-white pt-8 pb-8">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center text-xs font-bold tracking-widest uppercase text-gray-500 gap-2">
                         <Link href="/" className="hover:text-teal-600 flex items-center gap-1">
@@ -46,7 +57,7 @@ export default function HelpCenterPage() {
                                 Get quick answers and expert guidance for all your loan questions in one place. Explore helpful resources, step-by-step guides, and support topics designed to make your loan journey simple and stress-free. Our team is here to help you at every stage from application to approval.
                             </p>
 
-                            <div className="pt-2">
+                            {/* <div className="pt-2">
                                 <div className="relative w-full max-w-xs">
                                     <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
                                     <input
@@ -55,12 +66,13 @@ export default function HelpCenterPage() {
                                         className="w-full bg-white border border-gray-300 hover:border-gray-400 rounded-full py-3 pl-14 pr-6 focus:outline-none focus:ring-1 focus:ring-teal-500 text-sm tracking-wide text-gray-700 placeholder:text-gray-400 shadow-sm transition-all"
                                     />
                                 </div>
-                            </div>
+                            </div> */}
                         </RevealOnScroll>
 
-                        {/* Right Content - Image */}
+                        {/* Right Content - Map or Image */}
                         <RevealOnScroll className="relative" delay={200}>
-                            <div className="relative z-10">
+                            <div className="relative z-10 w-full">
+
                                 <img
                                     src="/Help.svg"
                                     alt="Help Center Support"
@@ -202,7 +214,7 @@ export default function HelpCenterPage() {
                             </div>
                             <h3 className="text-xl font-bold text-white mb-2">Call Us</h3>
                             <p className="text-gray-400 text-sm font-semibold tracking-wide uppercase">
-                                +91 98XXX XXXXX
+                                {contactInfo ? contactInfo.phone : '+91 98XXX XXXXX'}
                             </p>
                         </RevealOnScroll>
 
@@ -213,7 +225,7 @@ export default function HelpCenterPage() {
                             </div>
                             <h3 className="text-xl font-bold text-white mb-2">Email Support</h3>
                             <p className="text-gray-400 text-sm font-semibold tracking-wide uppercase">
-                                SUPPORT@SCAPITAL.COM
+                                {contactInfo ? contactInfo.email : 'SUPPORT@SCAPITAL.COM'}
                             </p>
                         </RevealOnScroll>
 
@@ -224,7 +236,7 @@ export default function HelpCenterPage() {
                             </div>
                             <h3 className="text-xl font-bold text-white mb-2">Working Hours</h3>
                             <p className="text-gray-400 text-sm font-semibold tracking-wide uppercase">
-                                MON-SAT: 9:30 AM - 6:30 PM
+                                {contactInfo ? contactInfo.workingHours : 'MON-SAT: 9:30 AM - 6:30 PM'}
                             </p>
                         </RevealOnScroll>
 
@@ -235,7 +247,7 @@ export default function HelpCenterPage() {
                             </div>
                             <h3 className="text-xl font-bold text-white mb-2">Address</h3>
                             <p className="text-gray-400 text-sm font-semibold tracking-wide uppercase">
-                                AHMEDABAD
+                                {contactInfo ? contactInfo.address : 'AHMEDABAD'}
                             </p>
                         </RevealOnScroll>
 

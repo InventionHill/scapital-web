@@ -168,12 +168,12 @@ export default function Navbar() {
                                             <Link
                                                 key={service.id}
                                                 href={`/services/${service.id}`}
-                                                className="flex items-center gap-4 px-6 py-3.5 hover:bg-gray-50 transition-colors group"
+                                                className={`flex items-center gap-4 px-6 py-3.5 transition-colors group ${pathname === `/services/${service.id}` ? 'bg-teal-50' : 'hover:bg-gray-50'}`}
                                             >
-                                                <div className="text-gray-600 group-hover:text-teal-600">
+                                                <div className={`${pathname === `/services/${service.id}` ? 'text-teal-600' : 'text-gray-600 group-hover:text-teal-600'}`}>
                                                     {getServiceIcon(service.title, service.icon)}
                                                 </div>
-                                                <span className="text-[15px] font-medium text-gray-800 group-hover:text-teal-600">
+                                                <span className={`text-[15px] font-medium ${pathname === `/services/${service.id}` ? 'text-teal-600' : 'text-gray-800 group-hover:text-teal-600'}`}>
                                                     {service.title}
                                                 </span>
                                             </Link>
@@ -206,12 +206,12 @@ export default function Navbar() {
                                         <Link
                                             key={link.title}
                                             href={link.href}
-                                            className="flex items-center gap-4 px-6 py-3.5 hover:bg-gray-50 transition-colors group"
+                                            className={`flex items-center gap-4 px-6 py-3.5 transition-colors group ${pathname === link.href ? 'bg-teal-50' : 'hover:bg-gray-50'}`}
                                         >
-                                            <div className="text-gray-600 group-hover:text-teal-600">
+                                            <div className={`${pathname === link.href ? 'text-teal-600' : 'text-gray-600 group-hover:text-teal-600'}`}>
                                                 {link.icon}
                                             </div>
-                                            <span className="text-[15px] font-medium text-gray-800 group-hover:text-teal-600">
+                                            <span className={`text-[15px] font-medium ${pathname === link.href ? 'text-teal-600' : 'text-gray-800 group-hover:text-teal-600'}`}>
                                                 {link.title}
                                             </span>
                                         </Link>
@@ -227,7 +227,7 @@ export default function Navbar() {
                             onMouseLeave={handleSupportMouseLeave}
                         >
                             <button
-                                className={`flex items-center gap-1 font-bold text-xs tracking-widest uppercase transition-colors ${['/help-center', '/terms', '/privacy'].includes(pathname) ? 'text-teal-600' : 'text-gray-500 hover:text-teal-600'
+                                className={`flex items-center gap-1 font-bold text-xs tracking-widest uppercase transition-colors ${['/help-center', '/terms', '/privacy-policy'].includes(pathname) ? 'text-teal-600' : 'text-gray-500 hover:text-teal-600'
                                     }`}
                             >
                                 SUPPORT
@@ -241,12 +241,12 @@ export default function Navbar() {
                                         <Link
                                             key={link.title}
                                             href={link.href}
-                                            className="flex items-center gap-4 px-6 py-3.5 hover:bg-gray-50 transition-colors group"
+                                            className={`flex items-center gap-4 px-6 py-3.5 transition-colors group ${pathname === link.href ? 'bg-teal-50' : 'hover:bg-gray-50'}`}
                                         >
-                                            <div className="text-gray-600 group-hover:text-teal-600">
+                                            <div className={`${pathname === link.href ? 'text-teal-600' : 'text-gray-600 group-hover:text-teal-600'}`}>
                                                 {link.icon}
                                             </div>
-                                            <span className="text-[15px] font-medium text-gray-800 group-hover:text-teal-600">
+                                            <span className={`text-[15px] font-medium ${pathname === link.href ? 'text-teal-600' : 'text-gray-800 group-hover:text-teal-600'}`}>
                                                 {link.title}
                                             </span>
                                         </Link>
@@ -258,9 +258,6 @@ export default function Navbar() {
 
                     {/* Buttons */}
                     <div className="hidden md:flex items-center space-x-4">
-                        <button className="text-gray-800 font-bold text-xs tracking-wider border-[1px] border-black px-6 py-2.5 rounded-full hover:border-teal-600 hover:text-teal-600 transition-colors uppercase">
-                            Login
-                        </button>
                         <button
                             onClick={openDialog}
                             className="bg-[#111827] text-white px-6 py-2.5 border-[1px] border-black rounded-full font-bold text-xs tracking-wider hover:bg-gray-800 transition-colors uppercase"
@@ -286,7 +283,13 @@ export default function Navbar() {
             {isOpen && (
                 <div className="md:hidden bg-white border-b border-gray-100">
                     <div className="px-4 pt-2 pb-4 space-y-2">
-                        <Link href="/" className="block px-3 py-2 text-teal-600 font-medium bg-teal-50 rounded-md">
+                        <Link
+                            href="/"
+                            className={`block px-3 py-2 rounded-md font-medium transition-colors ${pathname === '/'
+                                ? 'bg-teal-50 text-teal-600'
+                                : 'text-gray-600 hover:bg-gray-50 hover:text-teal-600'
+                                }`}
+                        >
                             Home
                         </Link>
 
@@ -296,7 +299,10 @@ export default function Navbar() {
                                 <Link
                                     key={service.id}
                                     href={`/services/${service.id}`}
-                                    className="block px-3 py-2 pl-6 text-gray-600 hover:bg-gray-50 hover:text-teal-600 font-medium rounded-md text-sm"
+                                    className={`block px-3 py-2 pl-6 font-medium rounded-md text-sm transition-colors ${pathname === `/services/${service.id}`
+                                        ? 'bg-teal-50 text-teal-600'
+                                        : 'text-gray-600 hover:bg-gray-50 hover:text-teal-600'
+                                        }`}
                                 >
                                     {service.title}
                                 </Link>
@@ -309,7 +315,10 @@ export default function Navbar() {
                                 <Link
                                     key={link.title}
                                     href={link.href}
-                                    className="block px-3 py-2 pl-6 text-gray-600 hover:bg-gray-50 hover:text-teal-600 font-medium rounded-md text-sm"
+                                    className={`block px-3 py-2 pl-6 font-medium rounded-md text-sm transition-colors ${pathname === link.href
+                                        ? 'bg-teal-50 text-teal-600'
+                                        : 'text-gray-600 hover:bg-gray-50 hover:text-teal-600'
+                                        }`}
                                 >
                                     {link.title}
                                 </Link>
@@ -322,7 +331,10 @@ export default function Navbar() {
                                 <Link
                                     key={link.title}
                                     href={link.href}
-                                    className="block px-3 py-2 pl-6 text-gray-600 hover:bg-gray-50 hover:text-teal-600 font-medium rounded-md text-sm"
+                                    className={`block px-3 py-2 pl-6 font-medium rounded-md text-sm transition-colors ${pathname === link.href
+                                        ? 'bg-teal-50 text-teal-600'
+                                        : 'text-gray-600 hover:bg-gray-50 hover:text-teal-600'
+                                        }`}
                                 >
                                     {link.title}
                                 </Link>
@@ -330,11 +342,14 @@ export default function Navbar() {
                         </div>
 
                         <div className="pt-4 flex flex-col space-y-3">
-                            <button className="w-full text-center text-teal-600 font-semibold border border-teal-600 py-2 rounded-full">
-                                Log In
-                            </button>
-                            <button className="w-full bg-teal-900 text-white py-2 rounded-full font-medium">
-                                Get App
+                            <button
+                                onClick={() => {
+                                    setIsOpen(false);
+                                    openDialog();
+                                }}
+                                className="w-full bg-[#111827] text-white py-2.5 border-[1px] border-black rounded-full font-bold text-xs tracking-wider hover:bg-gray-800 transition-colors uppercase"
+                            >
+                                Apply Now
                             </button>
                         </div>
                     </div>

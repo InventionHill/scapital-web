@@ -2,13 +2,61 @@
 
 import { ArrowRight, ChevronRight, Search } from 'lucide-react';
 import Link from 'next/link';
+import React, { useEffect, useRef, useState } from 'react';
 import FAQSection from '../components/FAQSection';
 import Footer from '../components/Footer';
 import Forms from '../components/Forms';
 import Navbar from '../components/Navbar';
 import RevealOnScroll from '../components/RevealOnScroll';
+import { getBlogs, Blog } from '../lib/api';
+import BlogCard from '../components/BlogCard';
 
-export default function ContactPage() {
+export default function BlogPage() {
+    const [allBlogs, setAllBlogs] = useState<Blog[]>([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [popularBlogs, setPopularBlogs] = useState<Blog[]>([]);
+    const [loading, setLoading] = useState(true);
+    const popularRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                // Fetch all active blogs
+                const blogs = await getBlogs({ isActive: true });
+                setAllBlogs(blogs);
+
+                // Fetch popular blogs
+                const popular = await getBlogs({ isActive: true, isPopular: true });
+                setPopularBlogs(popular);
+            } catch (error) {
+                console.error("Failed to load blogs", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchData();
+    }, []);
+
+    const [visibleCount, setVisibleCount] = useState(6);
+
+    const filteredBlogs = allBlogs.filter(blog =>
+        blog.category.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const recentBlogs = filteredBlogs.slice(0, 3);
+    // previouslyBlogs are those after the first 3
+    const previouslyBlogsAll = filteredBlogs.slice(3);
+    const previouslyBlogs = previouslyBlogsAll.slice(0, visibleCount);
+
+    const handleSeeMore = () => {
+        setVisibleCount(prev => prev + 6);
+    };
+
+    const scrollToPopular = () => {
+        popularRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+
 
     return (
         <main className="min-h-screen bg-white font-sans">
@@ -46,20 +94,24 @@ export default function ContactPage() {
                                 Get in touch with our loan experts for fast and reliable financial guidance tailored to your needs. Our team helps you understand the best loan options, eligibility, and documentation with complete transparency. Connect with us for quick support and a smooth, hassle-free loan process.
                             </p>
 
-                            <div className="pt-2">
-                                <button className="bg-[#137a78] hover:bg-teal-700 text-white px-8 py-3 rounded-full font-bold text-sm tracking-widest uppercase transition-all shadow-lg hover:shadow-xl hover:-translate-y-1">
-                                    View Open Position
-                                </button>
-                            </div>
+                            {popularBlogs.length > 0 && (
+                                <div className="pt-2">
+                                    <button
+                                        onClick={scrollToPopular}
+                                        className="bg-[#137a78] hover:bg-teal-700 text-white px-8 py-3 rounded-full font-bold text-sm tracking-widest uppercase transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
+                                    >
+                                        Explore Popular Articles
+                                    </button>
+                                </div>
+                            )}
                         </RevealOnScroll>
 
                         {/* Right Content - Image */}
                         <RevealOnScroll className="relative" delay={200}>
                             <div className="relative z-10">
-                                {/* Using Career_image.png as requested */}
                                 <img
                                     src="/Blog.svg"
-                                    alt="Career Growth"
+                                    alt="Blog Hero"
                                     className="w-full h-auto object-contain"
                                 />
                             </div>
@@ -78,11 +130,13 @@ export default function ContactPage() {
                         <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-12">
                             <h2 className="text-3xl md:text-4xl font-bold text-[#1f2937]">Browse by category</h2>
                             <div className="relative w-full md:w-96">
-                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5 pointer-events-none" />
                                 <input
                                     type="text"
                                     placeholder="Search a category"
-                                    className="w-full bg-white border border-[#0d9488] rounded-full py-3 pl-12 pr-6 focus:outline-none focus:ring-1 focus:ring-[#0d9488] text-sm placeholder:text-gray-400 caret-gray-400"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="w-full bg-white border border-[#0d9488] rounded-full py-3 pl-12 pr-6 focus:outline-none focus:ring-1 focus:ring-[#0d9488] text-sm text-gray-900 placeholder:text-gray-500 caret-[#0d9488]"
                                 />
                             </div>
                         </div>
@@ -95,325 +149,51 @@ export default function ContactPage() {
 
                     {/* Blog Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {/* Blog 1 */}
-                        <RevealOnScroll delay={100}>
-                            <div className="group cursor-pointer">
-                                <div className="rounded-2xl overflow-hidden mb-6 h-64 w-full">
-                                    <img src="/Blog1.svg" alt="Blog 1" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                </div>
-                                <div className="space-y-3">
-                                    <span className="text-sm text-gray-500 font-medium">18 Nov 2025</span>
-                                    <h4 className="text-xl font-bold text-[#1f2937] leading-tight group-hover:text-teal-600 transition-colors">
-                                        How to Get a Personal Loan Approved Faster
-                                    </h4>
-                                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                                        Learn the key factors lenders check before approving a personal loan. Discover simple steps to improve your approval chances and avoid common mistakes.
-                                    </p>
-                                    <div className="flex items-center gap-2 text-[#0d9488] font-bold text-sm mt-2 group-hover:gap-3 transition-all">
-                                        Read More <ArrowRight size={16} />
-                                    </div>
-                                </div>
-                            </div>
-                        </RevealOnScroll>
-                        {/* Blog 2 */}
-                        <RevealOnScroll delay={200}>
-                            <div className="group cursor-pointer">
-                                <div className="rounded-2xl overflow-hidden mb-6 h-64 w-full">
-                                    <img src="/Blog2.svg" alt="Blog 2" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                </div>
-                                <div className="space-y-3">
-                                    <span className="text-sm text-gray-500 font-medium">18 Nov 2025</span>
-                                    <h4 className="text-xl font-bold text-[#1f2937] leading-tight group-hover:text-teal-600 transition-colors">
-                                        How to Get a Personal Loan Approved Faster
-                                    </h4>
-                                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                                        Learn the key factors lenders check before approving a personal loan. Discover simple steps to improve your approval chances and avoid common mistakes.
-                                    </p>
-                                    <div className="flex items-center gap-2 text-[#0d9488] font-bold text-sm mt-2 group-hover:gap-3 transition-all">
-                                        Read More <ArrowRight size={16} />
-                                    </div>
-                                </div>
-                            </div>
-                        </RevealOnScroll>
-                        {/* Blog 3 */}
-                        <RevealOnScroll delay={300}>
-                            <div className="group cursor-pointer">
-                                <div className="rounded-2xl overflow-hidden mb-6 h-64 w-full">
-                                    <img src="/Blog3.svg" alt="Blog 3" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                </div>
-                                <div className="space-y-3">
-                                    <span className="text-sm text-gray-500 font-medium">18 Nov 2025</span>
-                                    <h4 className="text-xl font-bold text-[#1f2937] leading-tight group-hover:text-teal-600 transition-colors">
-                                        How to Get a Personal Loan Approved Faster
-                                    </h4>
-                                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                                        Learn the key factors lenders check before approving a personal loan. Discover simple steps to improve your approval chances and avoid common mistakes.
-                                    </p>
-                                    <div className="flex items-center gap-2 text-[#0d9488] font-bold text-sm mt-2 group-hover:gap-3 transition-all">
-                                        Read More <ArrowRight size={16} />
-                                    </div>
-                                </div>
-                            </div>
-                        </RevealOnScroll>
+                        {loading ? (
+                            <div className="col-span-full text-center py-20 text-gray-500">Loading blogs...</div>
+                        ) : recentBlogs.length > 0 ? (
+                            recentBlogs.map((blog, idx) => <BlogCard key={blog.id} blog={blog} delay={100 * (idx + 1)} />)
+                        ) : (
+                            <div className="col-span-full text-center py-10 text-gray-400">No recent blogs found.</div>
+                        )}
                     </div>
 
                     {/* Popular Blog Subheader */}
-                    <RevealOnScroll className="mb-8 mt-16">
-                        <h3 className="text-2xl font-bold text-[#0d9488]">Popular Blog</h3>
-                    </RevealOnScroll>
+                    {popularBlogs.length > 0 && (
+                        <div ref={popularRef}>
+                            <RevealOnScroll className="mb-8 mt-16">
+                                <h3 className="text-2xl font-bold text-[#0d9488]">Popular Blog</h3>
+                            </RevealOnScroll>
 
-                    {/* Popular Blog Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {/* Blog 1 */}
-                        <RevealOnScroll delay={100}>
-                            <div className="group cursor-pointer">
-                                <div className="rounded-2xl overflow-hidden mb-6 h-64 w-full">
-                                    <img src="/Blog1.svg" alt="Blog 1" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                </div>
-                                <div className="space-y-3">
-                                    <span className="text-sm text-gray-500 font-medium">18 Nov 2025</span>
-                                    <h4 className="text-xl font-bold text-[#1f2937] leading-tight group-hover:text-teal-600 transition-colors">
-                                        How to Get a Personal Loan Approved Faster
-                                    </h4>
-                                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                                        Learn the key factors lenders check before approving a personal loan. Discover simple steps to improve your approval chances and avoid common mistakes.
-                                    </p>
-                                    <div className="flex items-center gap-2 text-[#0d9488] font-bold text-sm mt-2 group-hover:gap-3 transition-all">
-                                        Read More <ArrowRight size={16} />
-                                    </div>
-                                </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {popularBlogs.map((blog, idx) => <BlogCard key={blog.id} blog={blog} delay={100 * (idx + 1)} />)}
                             </div>
-                        </RevealOnScroll>
-                        {/* Blog 2 */}
-                        <RevealOnScroll delay={200}>
-                            <div className="group cursor-pointer">
-                                <div className="rounded-2xl overflow-hidden mb-6 h-64 w-full">
-                                    <img src="/Blog2.svg" alt="Blog 2" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                </div>
-                                <div className="space-y-3">
-                                    <span className="text-sm text-gray-500 font-medium">18 Nov 2025</span>
-                                    <h4 className="text-xl font-bold text-[#1f2937] leading-tight group-hover:text-teal-600 transition-colors">
-                                        How to Get a Personal Loan Approved Faster
-                                    </h4>
-                                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                                        Learn the key factors lenders check before approving a personal loan. Discover simple steps to improve your approval chances and avoid common mistakes.
-                                    </p>
-                                    <div className="flex items-center gap-2 text-[#0d9488] font-bold text-sm mt-2 group-hover:gap-3 transition-all">
-                                        Read More <ArrowRight size={16} />
-                                    </div>
-                                </div>
-                            </div>
-                        </RevealOnScroll>
-                        {/* Blog 3 */}
-                        <RevealOnScroll delay={300}>
-                            <div className="group cursor-pointer">
-                                <div className="rounded-2xl overflow-hidden mb-6 h-64 w-full">
-                                    <img src="/Blog3.svg" alt="Blog 3" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                </div>
-                                <div className="space-y-3">
-                                    <span className="text-sm text-gray-500 font-medium">18 Nov 2025</span>
-                                    <h4 className="text-xl font-bold text-[#1f2937] leading-tight group-hover:text-teal-600 transition-colors">
-                                        How to Get a Personal Loan Approved Faster
-                                    </h4>
-                                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                                        Learn the key factors lenders check before approving a personal loan. Discover simple steps to improve your approval chances and avoid common mistakes.
-                                    </p>
-                                    <div className="flex items-center gap-2 text-[#0d9488] font-bold text-sm mt-2 group-hover:gap-3 transition-all">
-                                        Read More <ArrowRight size={16} />
-                                    </div>
-                                </div>
-                            </div>
-                        </RevealOnScroll>
-                        {/* Blog 4 (Repeat of 1) */}
-                        <RevealOnScroll delay={100}>
-                            <div className="group cursor-pointer">
-                                <div className="rounded-2xl overflow-hidden mb-6 h-64 w-full">
-                                    <img src="/Blog1.svg" alt="Blog 1" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                </div>
-                                <div className="space-y-3">
-                                    <span className="text-sm text-gray-500 font-medium">18 Nov 2025</span>
-                                    <h4 className="text-xl font-bold text-[#1f2937] leading-tight group-hover:text-teal-600 transition-colors">
-                                        How to Get a Personal Loan Approved Faster
-                                    </h4>
-                                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                                        Learn the key factors lenders check before approving a personal loan. Discover simple steps to improve your approval chances and avoid common mistakes.
-                                    </p>
-                                    <div className="flex items-center gap-2 text-[#0d9488] font-bold text-sm mt-2 group-hover:gap-3 transition-all">
-                                        Read More <ArrowRight size={16} />
-                                    </div>
-                                </div>
-                            </div>
-                        </RevealOnScroll>
-                        {/* Blog 5 (Repeat of 2) */}
-                        <RevealOnScroll delay={200}>
-                            <div className="group cursor-pointer">
-                                <div className="rounded-2xl overflow-hidden mb-6 h-64 w-full">
-                                    <img src="/Blog2.svg" alt="Blog 2" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                </div>
-                                <div className="space-y-3">
-                                    <span className="text-sm text-gray-500 font-medium">18 Nov 2025</span>
-                                    <h4 className="text-xl font-bold text-[#1f2937] leading-tight group-hover:text-teal-600 transition-colors">
-                                        How to Get a Personal Loan Approved Faster
-                                    </h4>
-                                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                                        Learn the key factors lenders check before approving a personal loan. Discover simple steps to improve your approval chances and avoid common mistakes.
-                                    </p>
-                                    <div className="flex items-center gap-2 text-[#0d9488] font-bold text-sm mt-2 group-hover:gap-3 transition-all">
-                                        Read More <ArrowRight size={16} />
-                                    </div>
-                                </div>
-                            </div>
-                        </RevealOnScroll>
-                        {/* Blog 6 (Repeat of 3) */}
-                        <RevealOnScroll delay={300}>
-                            <div className="group cursor-pointer">
-                                <div className="rounded-2xl overflow-hidden mb-6 h-64 w-full">
-                                    <img src="/Blog3.svg" alt="Blog 3" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                </div>
-                                <div className="space-y-3">
-                                    <span className="text-sm text-gray-500 font-medium">18 Nov 2025</span>
-                                    <h4 className="text-xl font-bold text-[#1f2937] leading-tight group-hover:text-teal-600 transition-colors">
-                                        How to Get a Personal Loan Approved Faster
-                                    </h4>
-                                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                                        Learn the key factors lenders check before approving a personal loan. Discover simple steps to improve your approval chances and avoid common mistakes.
-                                    </p>
-                                    <div className="flex items-center gap-2 text-[#0d9488] font-bold text-sm mt-2 group-hover:gap-3 transition-all">
-                                        Read More <ArrowRight size={16} />
-                                    </div>
-                                </div>
-                            </div>
-                        </RevealOnScroll>
-                    </div>
+                        </div>
+                    )}
 
                     {/* Previously Blog Subheader */}
-                    <RevealOnScroll className="mb-8 mt-16">
-                        <h3 className="text-2xl font-bold text-[#0d9488]">Previously Blog</h3>
-                    </RevealOnScroll>
+                    {previouslyBlogs.length > 0 && (
+                        <>
+                            <RevealOnScroll className="mb-8 mt-16">
+                                <h3 className="text-2xl font-bold text-[#0d9488]">Previously Blog</h3>
+                            </RevealOnScroll>
 
-                    {/* Previously Blog Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {/* Blog 1 */}
-                        <RevealOnScroll delay={100}>
-                            <div className="group cursor-pointer">
-                                <div className="rounded-2xl overflow-hidden mb-6 h-64 w-full">
-                                    <img src="/Blog1.svg" alt="Blog 1" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                </div>
-                                <div className="space-y-3">
-                                    <span className="text-sm text-gray-500 font-medium">18 Nov 2025</span>
-                                    <h4 className="text-xl font-bold text-[#1f2937] leading-tight group-hover:text-teal-600 transition-colors">
-                                        How to Get a Personal Loan Approved Faster
-                                    </h4>
-                                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                                        Learn the key factors lenders check before approving a personal loan. Discover simple steps to improve your approval chances and avoid common mistakes.
-                                    </p>
-                                    <div className="flex items-center gap-2 text-[#0d9488] font-bold text-sm mt-2 group-hover:gap-3 transition-all">
-                                        Read More <ArrowRight size={16} />
-                                    </div>
-                                </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {previouslyBlogs.map((blog, idx) => <BlogCard key={blog.id} blog={blog} delay={100 * (idx + 1)} />)}
                             </div>
-                        </RevealOnScroll>
-                        {/* Blog 2 */}
-                        <RevealOnScroll delay={200}>
-                            <div className="group cursor-pointer">
-                                <div className="rounded-2xl overflow-hidden mb-6 h-64 w-full">
-                                    <img src="/Blog2.svg" alt="Blog 2" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+
+                            {previouslyBlogsAll.length > visibleCount && (
+                                <div className="mt-12 text-center">
+                                    <button
+                                        onClick={handleSeeMore}
+                                        className="bg-[#137a78] hover:bg-teal-700 text-white px-8 py-3 rounded-full font-bold text-sm tracking-widest uppercase transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
+                                    >
+                                        See More
+                                    </button>
                                 </div>
-                                <div className="space-y-3">
-                                    <span className="text-sm text-gray-500 font-medium">18 Nov 2025</span>
-                                    <h4 className="text-xl font-bold text-[#1f2937] leading-tight group-hover:text-teal-600 transition-colors">
-                                        How to Get a Personal Loan Approved Faster
-                                    </h4>
-                                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                                        Learn the key factors lenders check before approving a personal loan. Discover simple steps to improve your approval chances and avoid common mistakes.
-                                    </p>
-                                    <div className="flex items-center gap-2 text-[#0d9488] font-bold text-sm mt-2 group-hover:gap-3 transition-all">
-                                        Read More <ArrowRight size={16} />
-                                    </div>
-                                </div>
-                            </div>
-                        </RevealOnScroll>
-                        {/* Blog 3 */}
-                        <RevealOnScroll delay={300}>
-                            <div className="group cursor-pointer">
-                                <div className="rounded-2xl overflow-hidden mb-6 h-64 w-full">
-                                    <img src="/Blog3.svg" alt="Blog 3" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                </div>
-                                <div className="space-y-3">
-                                    <span className="text-sm text-gray-500 font-medium">18 Nov 2025</span>
-                                    <h4 className="text-xl font-bold text-[#1f2937] leading-tight group-hover:text-teal-600 transition-colors">
-                                        How to Get a Personal Loan Approved Faster
-                                    </h4>
-                                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                                        Learn the key factors lenders check before approving a personal loan. Discover simple steps to improve your approval chances and avoid common mistakes.
-                                    </p>
-                                    <div className="flex items-center gap-2 text-[#0d9488] font-bold text-sm mt-2 group-hover:gap-3 transition-all">
-                                        Read More <ArrowRight size={16} />
-                                    </div>
-                                </div>
-                            </div>
-                        </RevealOnScroll>
-                        {/* Blog 4 (Repeat of 1) */}
-                        <RevealOnScroll delay={100}>
-                            <div className="group cursor-pointer">
-                                <div className="rounded-2xl overflow-hidden mb-6 h-64 w-full">
-                                    <img src="/Blog1.svg" alt="Blog 1" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                </div>
-                                <div className="space-y-3">
-                                    <span className="text-sm text-gray-500 font-medium">18 Nov 2025</span>
-                                    <h4 className="text-xl font-bold text-[#1f2937] leading-tight group-hover:text-teal-600 transition-colors">
-                                        How to Get a Personal Loan Approved Faster
-                                    </h4>
-                                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                                        Learn the key factors lenders check before approving a personal loan. Discover simple steps to improve your approval chances and avoid common mistakes.
-                                    </p>
-                                    <div className="flex items-center gap-2 text-[#0d9488] font-bold text-sm mt-2 group-hover:gap-3 transition-all">
-                                        Read More <ArrowRight size={16} />
-                                    </div>
-                                </div>
-                            </div>
-                        </RevealOnScroll>
-                        {/* Blog 5 (Repeat of 2) */}
-                        <RevealOnScroll delay={200}>
-                            <div className="group cursor-pointer">
-                                <div className="rounded-2xl overflow-hidden mb-6 h-64 w-full">
-                                    <img src="/Blog2.svg" alt="Blog 2" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                </div>
-                                <div className="space-y-3">
-                                    <span className="text-sm text-gray-500 font-medium">18 Nov 2025</span>
-                                    <h4 className="text-xl font-bold text-[#1f2937] leading-tight group-hover:text-teal-600 transition-colors">
-                                        How to Get a Personal Loan Approved Faster
-                                    </h4>
-                                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                                        Learn the key factors lenders check before approving a personal loan. Discover simple steps to improve your approval chances and avoid common mistakes.
-                                    </p>
-                                    <div className="flex items-center gap-2 text-[#0d9488] font-bold text-sm mt-2 group-hover:gap-3 transition-all">
-                                        Read More <ArrowRight size={16} />
-                                    </div>
-                                </div>
-                            </div>
-                        </RevealOnScroll>
-                        {/* Blog 6 (Repeat of 3) */}
-                        <RevealOnScroll delay={300}>
-                            <div className="group cursor-pointer">
-                                <div className="rounded-2xl overflow-hidden mb-6 h-64 w-full">
-                                    <img src="/Blog3.svg" alt="Blog 3" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                </div>
-                                <div className="space-y-3">
-                                    <span className="text-sm text-gray-500 font-medium">18 Nov 2025</span>
-                                    <h4 className="text-xl font-bold text-[#1f2937] leading-tight group-hover:text-teal-600 transition-colors">
-                                        How to Get a Personal Loan Approved Faster
-                                    </h4>
-                                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                                        Learn the key factors lenders check before approving a personal loan. Discover simple steps to improve your approval chances and avoid common mistakes.
-                                    </p>
-                                    <div className="flex items-center gap-2 text-[#0d9488] font-bold text-sm mt-2 group-hover:gap-3 transition-all">
-                                        Read More <ArrowRight size={16} />
-                                    </div>
-                                </div>
-                            </div>
-                        </RevealOnScroll>
-                    </div>
+                            )}
+                        </>
+                    )}
                 </div>
             </div>
 
