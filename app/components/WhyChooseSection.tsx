@@ -27,9 +27,8 @@ export default function WhyChooseSection() {
     return (
         <div className="bg-white md:py-5">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-5xl font-extrabold text-[#111827] mb-1 leading-tight">Why Choose</h2>
-                    <h2 className="text-3xl md:text-5xl font-extrabold text-teal-700 leading-tight">SCAPITAL ?</h2>
+                <div className="text-center mb-8">
+                    <h2 className="text-3xl md:text-5xl font-extrabold text-[#111827] leading-tight">Why Choose <span className="text-teal-700">SCAPITAL ?</span></h2>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

@@ -228,6 +228,8 @@ export default function ApplicationDialog() {
                 documents: documentUrls
             };
 
+            console.log(payload, 'payload');
+
             const response = await fetch(`${API_URL}/loan-applications`, {
                 method: 'POST',
                 headers: {

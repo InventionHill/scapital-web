@@ -24,7 +24,9 @@ const Forms = () => {
             try {
                 const response = await fetch(`${API_URL}/section-content/contact_info`);
                 if (response.ok) {
-                    const data = await response.json();
+                    const text = await response.text();
+                    const data = text ? JSON.parse(text) : null;
+
                     if (data && data.extraConfig) {
                         const config = typeof data.extraConfig === 'string'
                             ? JSON.parse(data.extraConfig)

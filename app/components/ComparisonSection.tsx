@@ -9,6 +9,9 @@ interface LoanProduct {
     name: string;
     icon: string;
     order: number;
+    loanBanner: {
+        title: string;
+    }
 }
 
 interface ComparisonParameter {
@@ -122,7 +125,9 @@ export default function ComparisonSection() {
                                 {products.map((product) => (
                                     <td key={`btn-${product.id}`} className="p-6 border-r border-gray-100 last:border-r-0 text-center">
                                         <button
-                                            onClick={() => openDialog({ loanType: product.name })}
+                                            onClick={() => openDialog({
+                                                loanType: product.loanBanner.title
+                                            })}
                                             className="bg-teal-700 text-white px-8 py-3 rounded-full text-[10px] font-bold tracking-widest uppercase hover:bg-teal-800 transition-colors"
                                         >
                                             Apply Now
