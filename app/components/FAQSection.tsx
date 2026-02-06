@@ -12,6 +12,9 @@ interface FAQ {
     defaultOpen: boolean;
 }
 
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://192.168.1.10:8000/api/v1';
+
 export default function FAQSection() {
     const [faqs, setFaqs] = useState<FAQ[]>([]);
     const [openIndices, setOpenIndices] = useState<number[]>([]);
@@ -19,7 +22,7 @@ export default function FAQSection() {
     useEffect(() => {
         const fetchFaqs = async () => {
             try {
-                const response = await fetch('http://192.168.1.10:8000/api/v1/faqs');
+                const response = await fetch(`${API_URL}/faqs`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch FAQs');
                 }

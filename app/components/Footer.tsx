@@ -3,7 +3,7 @@
 import { Send, Facebook, Twitter, Linkedin, Instagram, Globe } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { LoanBanner } from '../types';
+import { LoanBanner, ContactInfo } from '../types';
 
 interface SocialLinkData {
     id: string;
@@ -15,6 +15,7 @@ interface SocialLinkData {
 export default function Footer() {
     const [products, setProducts] = useState<LoanBanner[]>([]);
     const [socialLinks, setSocialLinks] = useState<SocialLinkData[]>([]);
+    const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,6 +35,13 @@ export default function Footer() {
                 if (resSocial.ok) {
                     const data: SocialLinkData[] = await resSocial.json();
                     setSocialLinks(data.filter(l => l.isActive));
+                }
+
+                // Fetch Contact Info
+                const resContact = await fetch(`${apiUrl}/contact-infos/active`);
+                if (resContact.ok) {
+                    const data: ContactInfo = await resContact.json();
+                    setContactInfo(data);
                 }
 
             } catch (error) {
@@ -67,15 +75,13 @@ export default function Footer() {
                             Engineered for speed, built for security.
                         </p>
 
-                        <div className="relative mt-4 max-w-sm">
-                            <input
-                                type="email"
-                                placeholder="Enter your email"
-                                className="w-full bg-[#1e293b] text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500 pr-12 text-sm placeholder:text-gray-400"
-                            />
-                            <button className="absolute right-2 top-1/2 -translate-y-1/2 text-teal-500 hover:text-teal-400 p-2">
-                                <Send size={18} />
-                            </button>
+                        <div className="mt-6 flex flex-col gap-2">
+                            {contactInfo && (
+                                <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+                                    <span className="block text-white font-semibold mb-1">Address:</span>
+                                    {contactInfo.address}
+                                </p>
+                            )}
                         </div>
                     </div>
 

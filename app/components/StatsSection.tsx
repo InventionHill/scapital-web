@@ -14,13 +14,15 @@ interface PlatformStat {
     order: number;
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://192.168.1.10:8000/api/v1';
+
 export default function StatsSection() {
     const [stats, setStats] = useState<PlatformStat[]>([]);
 
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const response = await fetch('http://192.168.1.10:8000/api/v1/platform-stats');
+                const response = await fetch(`${API_URL}/platform-stats`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch platform stats');
                 }

@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { Star, ArrowLeft, ArrowRight } from 'lucide-react';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://192.168.1.10:8000/api/v1';
+
 export default function TestimonialsSection() {
     const [testimonials, setTestimonials] = useState<any[]>([]);
 
@@ -12,7 +14,7 @@ export default function TestimonialsSection() {
     useEffect(() => {
         const fetchTestimonials = async () => {
             try {
-                const response = await fetch('http://192.168.1.10:8000/api/v1/testimonials');
+                const response = await fetch(`${API_URL}/testimonials`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch testimonials');
                 }

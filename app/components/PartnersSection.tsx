@@ -11,6 +11,8 @@ interface BankingPartner {
     order: number;
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://192.168.1.10:8000/api/v1';
+
 export default function PartnersSection() {
     const [partners, setPartners] = useState<BankingPartner[]>([]);
 
@@ -18,7 +20,7 @@ export default function PartnersSection() {
         const fetchPartners = async () => {
             try {
                 // Using IP as requested by user
-                const response = await fetch('http://192.168.1.10:8000/api/v1/banking-partners');
+                const response = await fetch(`${API_URL}/banking-partners`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch banking partners');
                 }

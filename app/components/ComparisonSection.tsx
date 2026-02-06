@@ -25,6 +25,7 @@ interface ComparisonValue {
     parameterId: string;
     value: string;
 }
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://192.168.1.10:8000/api/v1';
 
 export default function ComparisonSection() {
     const { openDialog } = useDialog();
@@ -37,19 +38,19 @@ export default function ComparisonSection() {
         const fetchData = async () => {
             try {
                 // Fetch Products
-                const productsRes = await fetch('http://192.168.1.10:8000/api/v1/loan-comparison/products');
+                const productsRes = await fetch(`${API_URL}/loan-comparison/products`);
                 if (!productsRes.ok) throw new Error('Failed to fetch products');
                 const productsData: LoanProduct[] = await productsRes.json();
                 setProducts(productsData.sort((a, b) => a.order - b.order));
 
                 // Fetch Parameters
-                const paramsRes = await fetch('http://192.168.1.10:8000/api/v1/loan-comparison/parameters');
+                const paramsRes = await fetch(`${API_URL}/loan-comparison/parameters`);
                 if (!paramsRes.ok) throw new Error('Failed to fetch parameters');
                 const paramsData: ComparisonParameter[] = await paramsRes.json();
                 setParameters(paramsData.sort((a, b) => a.order - b.order));
 
                 // Fetch Values
-                const valuesRes = await fetch('http://192.168.1.10:8000/api/v1/loan-comparison/values');
+                const valuesRes = await fetch(`${API_URL}/loan-comparison/values`);
                 if (!valuesRes.ok) throw new Error('Failed to fetch values');
                 const valuesData: ComparisonValue[] = await valuesRes.json();
                 setValues(valuesData);

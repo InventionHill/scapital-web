@@ -31,6 +31,8 @@ interface LoanBanner {
     isDefault?: boolean;
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://192.168.1.10:8000/api/v1';
+
 export default function LoanTabsSection() {
     const [banners, setBanners] = useState<LoanBanner[]>([]);
     const [activeTabId, setActiveTabId] = useState<string | null>(null);
@@ -41,7 +43,7 @@ export default function LoanTabsSection() {
     useEffect(() => {
         const fetchBanners = async () => {
             try {
-                const response = await fetch('http://192.168.1.10:8000/api/v1/loan-banner');
+                const response = await fetch(`${API_URL}/loan-banner`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch loan banners');
                 }

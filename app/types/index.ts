@@ -104,3 +104,13 @@ export interface EmployeeTestimonial {
   isActive: boolean;
   createdAt?: string;
 }
+
+export interface ContactInfo {
+  id: string;
+  phone: string;
+  email: string;
+  workingHours: string;
+  address: string;
+  mapUrl?: string;
+  isActive: boolean;
+}
