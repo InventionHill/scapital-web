@@ -7,6 +7,10 @@ interface DialogContextType {
     openDialog: (data?: any) => void;
     closeDialog: () => void;
     dialogData: any;
+    isJobDialogOpen: boolean;
+    openJobDialog: (data?: any) => void;
+    closeJobDialog: () => void;
+    jobDialogData: any;
 }
 
 const DialogContext = createContext<DialogContextType | undefined>(undefined);
@@ -29,8 +33,21 @@ export function DialogProvider({ children }: { children: ReactNode }) {
         setTimeout(() => setDialogData(null), 300); // Wait for animation
     };
 
+    const [isJobDialogOpen, setIsJobDialogOpen] = useState(false);
+    const [jobDialogData, setJobDialogData] = useState<any>(null);
+
+    const openJobDialog = (data?: any) => {
+        setJobDialogData(data || null);
+        setIsJobDialogOpen(true);
+    };
+
+    const closeJobDialog = () => {
+        setIsJobDialogOpen(false);
+        setTimeout(() => setJobDialogData(null), 300);
+    };
+
     React.useEffect(() => {
-        if (isOpen) {
+        if (isOpen || isJobDialogOpen) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'unset';
@@ -38,10 +55,13 @@ export function DialogProvider({ children }: { children: ReactNode }) {
         return () => {
             document.body.style.overflow = 'unset';
         };
-    }, [isOpen]);
+    }, [isOpen, isJobDialogOpen]);
 
     return (
-        <DialogContext.Provider value={{ isOpen, openDialog, closeDialog, dialogData }}>
+        <DialogContext.Provider value={{
+            isOpen, openDialog, closeDialog, dialogData,
+            isJobDialogOpen, openJobDialog, closeJobDialog, jobDialogData
+        }}>
             {children}
         </DialogContext.Provider>
     );

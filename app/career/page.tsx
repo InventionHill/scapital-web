@@ -11,7 +11,10 @@ import Navbar from '../components/Navbar';
 import RevealOnScroll from '../components/RevealOnScroll';
 import { KeyDepartment } from '../types';
 
+import { useDialog } from '../context/DialogContext';
+
 export default function CareerPage() {
+    const { openJobDialog } = useDialog();
     const [departments, setDepartments] = useState<KeyDepartment[]>([]);
 
     useEffect(() => {
@@ -68,7 +71,10 @@ export default function CareerPage() {
                             </p>
 
                             <div className="pt-2">
-                                <button className="bg-[#137a78] hover:bg-teal-700 text-white px-8 py-3 rounded-full font-bold text-sm tracking-widest uppercase transition-all shadow-lg hover:shadow-xl hover:-translate-y-1">
+                                <button
+                                    onClick={() => openJobDialog()}
+                                    className="bg-[#137a78] hover:bg-teal-700 text-white px-8 py-3 rounded-full font-bold text-sm tracking-widest uppercase transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
+                                >
                                     View Open Position
                                 </button>
                             </div>
@@ -294,7 +300,10 @@ export default function CareerPage() {
                                         <span className="text-[16px] md:text-[18px] font-bold text-[#1f2937]">{dept.title}</span>
                                         <span className="text-gray-500 font-medium ml-2 text-[15px] block md:inline md:mt-0 mt-1">( {dept.experience} )</span>
                                     </div>
-                                    <button className="bg-[#137a78] hover:bg-teal-700 text-white text-[12px] font-bold px-6 py-2 rounded-[10px] uppercase tracking-wider transition-colors shrink-0">
+                                    <button
+                                        onClick={() => openJobDialog({ position: dept.title })}
+                                        className="bg-[#137a78] cursor-pointer hover:bg-teal-700 text-white text-[12px] font-bold px-6 py-2 rounded-[10px] uppercase tracking-wider transition-colors shrink-0"
+                                    >
                                         APPLY NOW
                                     </button>
                                 </div>

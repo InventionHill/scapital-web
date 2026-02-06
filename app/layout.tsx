@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { DialogProvider } from "./context/DialogContext";
 import ApplicationDialog from "./components/ApplicationDialog";
+import JobApplicationDialog from "./components/JobApplicationDialog";
 
 const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700'],
@@ -66,6 +67,7 @@ export default function RootLayout({
         <DialogProvider>
           {children}
           <ApplicationDialog />
+          <JobApplicationDialog />
         </DialogProvider>
       </body>
     </html>
