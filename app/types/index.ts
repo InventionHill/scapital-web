@@ -86,7 +86,68 @@ export interface LoanBanner {
   defaultInterest?: number;
   minInterest?: number;
   maxInterest?: number;
+  
+  // Dynamic Page Content
+  pageContent?: PageContentSection[];
 }
+
+export type SectionType = 'overview' | 'benefits' | 'documents' | 'comparison' | 'rates' | 'steps';
+
+export interface BaseSection {
+  id: string;
+  type: SectionType;
+  isActive: boolean;
+  titleHighlight?: string; // Admin saves as titleHighlight
+  highlight?: string;      // Legacy mapping uses highlight
+}
+
+export interface OverviewSection extends BaseSection {
+  type: 'overview';
+  title: string;
+  highlight?: string;
+  content: string;
+}
+
+export interface BenefitsSection extends BaseSection {
+  type: 'benefits';
+  title: string;
+  highlight?: string;
+  items: BenefitItem[];
+}
+
+export interface DocumentsSection extends BaseSection {
+  type: 'documents';
+  title: string;
+  items: DocumentItem[];
+}
+
+export interface ComparisonSection extends BaseSection {
+  type: 'comparison';
+  title: string;
+  highlight?: string;
+  table?: { feature: string; scapital: string; banks: string; nbfcs: string }[]; // Legacy
+  items?: { feature: string; scapital: string; banks: string; nbfcs: string }[]; // Dynamic Editor uses items
+}
+
+export interface RatesSection extends BaseSection {
+  type: 'rates';
+  title: string;
+  highlight?: string;
+  image?: string;       // Dynamic Editor uses image
+  imageUrl?: string;    // Legacy uses imageUrl
+  charges?: RateItem[]; // Legacy
+  items?: RateItem[];   // Dynamic Editor uses items
+}
+
+export interface StepsSection extends BaseSection {
+  type: 'steps';
+  title: string;
+  highlight?: string;
+  buttonLabel?: string;
+  items: StepItem[];
+}
+
+export type PageContentSection = OverviewSection | BenefitsSection | DocumentsSection | ComparisonSection | RatesSection | StepsSection;
 
 export interface KeyDepartment {
   id: string;
