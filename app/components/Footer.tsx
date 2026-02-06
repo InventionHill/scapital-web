@@ -1,30 +1,57 @@
 "use client";
 
-import { Send } from 'lucide-react';
+import { Send, Facebook, Twitter, Linkedin, Instagram, Globe } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { LoanBanner } from '../types';
 
+interface SocialLinkData {
+    id: string;
+    platform: string;
+    url: string;
+    isActive: boolean;
+}
+
 export default function Footer() {
     const [products, setProducts] = useState<LoanBanner[]>([]);
+    const [socialLinks, setSocialLinks] = useState<SocialLinkData[]>([]);
 
     useEffect(() => {
-        const fetchProducts = async () => {
+        const fetchData = async () => {
             try {
                 // Use localhost for local dev if env not set
                 const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://192.168.1.10:8000/api/v1';
-                const res = await fetch(`${apiUrl}/loan-banner`);
-                if (res.ok) {
-                    const data: LoanBanner[] = await res.json();
+
+                // Fetch Products
+                const resProducts = await fetch(`${apiUrl}/loan-banner`);
+                if (resProducts.ok) {
+                    const data: LoanBanner[] = await resProducts.json();
                     setProducts(data.filter(s => s.isActive));
                 }
+
+                // Fetch Social Links
+                const resSocial = await fetch(`${apiUrl}/social-links`);
+                if (resSocial.ok) {
+                    const data: SocialLinkData[] = await resSocial.json();
+                    setSocialLinks(data.filter(l => l.isActive));
+                }
+
             } catch (error) {
-                console.error("Failed to fetch products:", error);
+                console.error("Failed to fetch footer data:", error);
             }
         };
 
-        fetchProducts();
+        fetchData();
     }, []);
+
+    const getIcon = (platform: string) => {
+        const p = platform.toLowerCase();
+        if (p === 'facebook') return <Facebook size={20} />;
+        if (p === 'twitter') return <Twitter size={20} />;
+        if (p === 'linkedin') return <Linkedin size={20} />;
+        if (p === 'instagram') return <Instagram size={20} />;
+        return <Globe size={20} />;
+    };
 
     return (
         <footer className="bg-[#0F172A] text-white pt-10 md:pt-12 pb-4 md:pb-4 font-sans">
@@ -76,10 +103,10 @@ export default function Footer() {
                         <div>
                             <h3 className="font-bold text-sm text-white mb-6">Company</h3>
                             <ul className="space-y-4 text-sm text-gray-400">
-                                <li><a href="#" className="hover:text-teal-400 transition-colors">About Us</a></li>
+                                <li><Link href="/about" className="hover:text-teal-400 transition-colors">About Us</Link></li>
                                 <li><Link href="/career" className="hover:text-teal-400 transition-colors">Careers</Link></li>
-                                <li><a href="#" className="hover:text-teal-400 transition-colors">Blog</a></li>
-                                <li><a href="#" className="hover:text-teal-400 transition-colors">Contact</a></li>
+                                <li><Link href="/blog" className="hover:text-teal-400 transition-colors">Blog</Link></li>
+                                <li><Link href="/contact" className="hover:text-teal-400 transition-colors">Contact</Link></li>
                             </ul>
                         </div>
 
@@ -87,28 +114,37 @@ export default function Footer() {
                         <div>
                             <h3 className="font-bold text-sm text-white mb-6">Support</h3>
                             <ul className="space-y-4 text-sm text-gray-400">
-                                <li><a href="#" className="hover:text-teal-400 transition-colors">Help Center</a></li>
-                                <li><a href="#" className="hover:text-teal-400 transition-colors">FAQs</a></li>
+                                <li><Link href="/help-center" className="hover:text-teal-400 transition-colors">Help Center</Link></li>
                                 <li><Link href="/terms" className="hover:text-teal-400 transition-colors">Terms of Service</Link></li>
                                 <li><Link href="/privacy-policy" className="hover:text-teal-400 transition-colors">Privacy Policy</Link></li>
                             </ul>
                         </div>
 
                         {/* Social */}
-                        <div>
-                            <h3 className="font-bold text-sm text-white mb-6">Social</h3>
-                            <ul className="space-y-4 text-sm text-gray-400">
-                                <li><a href="#" className="hover:text-teal-400 transition-colors">Facebook</a></li>
-                                <li><a href="#" className="hover:text-teal-400 transition-colors">Twitter</a></li>
-                                <li><a href="#" className="hover:text-teal-400 transition-colors">LinkedIn</a></li>
-                                <li><a href="#" className="hover:text-teal-400 transition-colors">Instagram</a></li>
-                            </ul>
-                        </div>
+                        {socialLinks.length > 0 && (
+                            <div>
+                                <h3 className="font-bold text-sm text-white mb-6">Social</h3>
+                                <ul className="space-y-4 text-sm text-gray-400">
+                                    {socialLinks.map((link) => (
+                                        <li key={link.id}>
+                                            <a
+                                                href={link.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="hover:text-teal-400 transition-colors flex items-center gap-2"
+                                            >
+                                                <span className="capitalize">{link.platform}</span>
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
                     </div>
                 </div>
 
                 <div className="border-t border-gray-800 pt-4 text-center text-sm text-gray-500">
-                    <p>&copy; 2024 SCAPITAL. All rights reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} SCAPITAL. All rights reserved.</p>
                 </div>
             </div>
         </footer>

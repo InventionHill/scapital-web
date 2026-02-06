@@ -103,6 +103,8 @@ export default async function ServicePage({ params }: { params: Promise<{ id: st
                                     Home
                                 </Link>
                                 <ChevronRight size={14} />
+                                <span className="hover:text-teal-600 cursor-pointer">Service</span>
+                                <ChevronRight size={14} />
                                 <span className="text-teal-600">{service.title}</span>
                             </div>
                             <h1 className="text-4xl md:text-5xl font-extrabold text-[#1f2937] leading-[1.15] tracking-tight">
