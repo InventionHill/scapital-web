@@ -18,7 +18,9 @@ export default function TermsOfService() {
             try {
                 const response = await fetch(`${API_URL}/section-content/terms_of_service`);
                 if (response.ok) {
-                    const data = await response.json();
+                    const text = await response.text();
+                    const data = text ? JSON.parse(text) : null;
+
                     if (data && data.isActive) {
                         setContent(data);
                     }

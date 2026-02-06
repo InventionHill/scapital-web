@@ -24,7 +24,7 @@ export default function ContactPage() {
                         <ChevronRight size={14} />
                         <span className="hover:text-teal-600 cursor-pointer">Company</span>
                         <ChevronRight size={14} />
-                        <span className="text-teal-600">Contact Us</span>
+                        <span className="text-teal-600">Blog</span>
                     </div>
                 </div>
             </div>
